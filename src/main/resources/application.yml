@@ -1,7 +1,7 @@
 server:
   port: 8000
   servlet:
-    context-path: /blog
+    context-path: /
     
 spring:
   mvc:
