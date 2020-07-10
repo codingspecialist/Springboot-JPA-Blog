@@ -41,6 +41,8 @@ public class BoardApiController {
 		boardService.글수정하기(id, board);
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
+	
+	
 }
 
 
