@@ -28,12 +28,18 @@ public class UserService {
 	}
 	
 	@Transactional
-	public void 회원가입(User user) {
+	public int 회원가입(User user) {
 		String rawPassword = user.getPassword(); // 1234 원문
 		String encPassword = encoder.encode(rawPassword); // 해쉬
 		user.setPassword(encPassword);
 		user.setRole(RoleType.USER);
-		userRepository.save(user);
+		try {
+			userRepository.save(user);
+			return 1;
+		} catch (Exception e) {
+			return -1;
+		}
+		
 	}
 
 	@Transactional
