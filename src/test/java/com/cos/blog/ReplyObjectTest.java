@@ -1,8 +1,9 @@
 package com.cos.blog;
 
-import org.junit.Test;
+
 
 import com.cos.blog.model.Reply;
+import org.junit.jupiter.api.Test;
 
 public class ReplyObjectTest {
 	
