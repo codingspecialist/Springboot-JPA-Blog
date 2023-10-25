@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.7.14</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.cos</groupId>
@@ -15,7 +15,7 @@
     <description>My First Blog Project</description>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
     </properties>
 
     <dependencies>
@@ -34,12 +34,12 @@
         </dependency>
 
 
-        <!-- JSP 템플릿 엔진 -->
+        <!-- JSP 템플릿 엔진 라이브러리 변경-->
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jasper</artifactId>
-            <version>9.0.22</version>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
+
 
         <!-- JSTL -->
         <dependency>
@@ -50,6 +50,12 @@
 
         <!-- 추가 라이브러리 종료 -->
 
+        <!-- MySQL 8.0 버전 세팅해주세요 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,12 +79,6 @@
             <optional>true</optional>
         </dependency>
 
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
 
 
         <dependency>
