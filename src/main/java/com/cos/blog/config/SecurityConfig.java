@@ -34,9 +34,9 @@ public class SecurityConfig{ // 2. extends 제거
 		// 1. csrf 비활성화
 		http.csrf(c -> c.disable());
 
-		// 2. 인증 주소 설정
+		// 2. 인증 주소 설정 (WEB-INF/** 추가해줘야 함. 아니면 인증이 필요한 주소로 무한 리다이렉션 일어남)
 		http.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**").permitAll()
+				.requestMatchers("/WEB-INF/**","/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**").permitAll()
 				.anyRequest().authenticated());
 		
 		// 3. 로그인 처리 프로세스 설정
