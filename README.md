@@ -6,6 +6,13 @@
 ### maven 의존성과 시큐리티 변경된 코드
 브랜치 update-202403 을 참고하세요
 
+### mysql 연결
+```sql
+create user 'cos'@'%' identified by 'cos1234';
+GRANT ALL PRIVILEGES ON *.* TO 'cos'@'%';
+create database blog;
+```
+
 ### gradle 의존성
 ```gradle
 dependencies {
