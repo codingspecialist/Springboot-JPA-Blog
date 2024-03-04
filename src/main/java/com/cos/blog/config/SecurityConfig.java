@@ -32,13 +32,12 @@ public class SecurityConfig{ // 2. extends 제거
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// 1. csrf 비활성화
-		http.csrf().disable();
+		http.csrf(c -> c.disable());
 
 		// 2. 인증 주소 설정
-		http.authorizeRequests(
-				authorize -> authorize.antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**").permitAll()
-						.anyRequest().authenticated()
-		);
+		http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**").permitAll()
+				.anyRequest().authenticated());
 		
 		// 3. 로그인 처리 프로세스 설정
 		http.formLogin(f -> f.loginPage("/auth/loginForm")
