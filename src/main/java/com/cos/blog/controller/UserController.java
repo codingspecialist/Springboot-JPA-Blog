@@ -1,5 +1,6 @@
 package com.cos.blog.controller;
 
+import com.cos.blog.config.auth.PrincipalDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -23,6 +26,8 @@ import com.cos.blog.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.servlet.http.HttpSession;
 
 // 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/** 허용
 // 그냥 주소가 / 이면 index.jsp 허용
@@ -39,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private HttpSession session;
 	
 	@GetMapping("/auth/joinForm")
 	public String joinForm() {
@@ -152,9 +160,15 @@ public class UserController {
 		
 		System.out.println("자동 로그인을 진행합니다.");
 		// 로그인 처리
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), cosKey));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+		// (1. UsernamePasswordAuthenticationToken 토큰 생성시 이제 정확한 정보를 추가해줘야 한다 UserDetails, password, role)
+		// (2. SecurityContext에 Authentication 객체를 추가하면 예전에는 세션이 만들어졌다)
+		// (3. 이제는 보안때문에, 해당 컨텍스트를 세션에 직접 주입해줘야 한다 HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY)
+		PrincipalDetail principalDetail = new PrincipalDetail(kakaoUser);
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(principalDetail, principalDetail.getPassword(), principalDetail.getAuthorities()));
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		securityContext.setAuthentication(authentication);
+		session.setAttribute(HttpSessionSecurityContextRepository.
+				SPRING_SECURITY_CONTEXT_KEY, securityContext);
 		return "redirect:/";
 	}
 
